@@ -32,16 +32,17 @@ const images = [
 const projects = document.querySelectorAll('.project');
 
 projects.forEach(project => {
-  // Initial random position
-  project.style.top = `${Math.random() * 80}vh`;
-  project.style.left = `${Math.random() * 80}vw`;
+  // Initial random placement - avoids edges a bit
+  const startTop = Math.random() * (window.innerHeight - 220);
+  const startLeft = Math.random() * (window.innerWidth - 220);
+  project.style.top = `${startTop}px`;
+  project.style.left = `${startLeft}px`;
 
-  // Gentle random movement
+  // Random gentle drift
   let dx = (Math.random() - 0.5) * 0.3;
   let dy = (Math.random() - 0.5) * 0.3;
 
   setInterval(() => {
-    const rect = project.getBoundingClientRect();
     let top = parseFloat(project.style.top);
     let left = parseFloat(project.style.left);
 
@@ -56,31 +57,45 @@ projects.forEach(project => {
     project.style.left = `${left}px`;
   }, 40);
 
-  // Draggable setup
+  // DRAGGING vs CLICK LOGIC
   let isDragging = false;
-  let offsetX, offsetY;
+  let clickStartX = 0;
+  let clickStartY = 0;
 
   project.addEventListener('mousedown', e => {
     isDragging = true;
-    offsetX = e.offsetX;
-    offsetY = e.offsetY;
+    clickStartX = e.clientX;
+    clickStartY = e.clientY;
     project.style.zIndex = 1000;
+    e.preventDefault(); // Stops text/image selection
   });
 
   document.addEventListener('mousemove', e => {
     if (isDragging) {
-      project.style.top = `${e.clientY - offsetY}px`;
-      project.style.left = `${e.clientX - offsetX}px`;
+      const offsetX = e.clientX - clickStartX;
+      const offsetY = e.clientY - clickStartY;
+
+      const newTop = parseFloat(project.style.top) + offsetY;
+      const newLeft = parseFloat(project.style.left) + offsetX;
+
+      project.style.top = `${newTop}px`;
+      project.style.left = `${newLeft}px`;
+
+      clickStartX = e.clientX;
+      clickStartY = e.clientY;
     }
   });
 
-  document.addEventListener('mouseup', () => {
-    isDragging = false;
-    project.style.zIndex = 1;
-  });
+  document.addEventListener('mouseup', e => {
+    if (isDragging) {
+      isDragging = false;
+      project.style.zIndex = 1;
 
-  // Click to open project
-  project.addEventListener('click', () => {
-    window.location.href = project.dataset.link;
+      const distMoved = Math.hypot(e.clientX - clickStartX, e.clientY - clickStartY);
+      if (distMoved < 5) {
+        // Considered a true click
+        window.location.href = project.dataset.link;
+      }
+    }
   });
 });
