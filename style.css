@@ -54,3 +54,45 @@ body, html {
     color: white;
   }
   
+  #projects-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  .project {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    border: 3px solid white;
+    cursor: grab;
+    transition: transform 0.3s ease;
+    z-index: 1;
+  }
+  
+  .project::after {
+    content: var(--title);
+    position: absolute;
+    bottom: -1.8em;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 1rem;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    font-family: monospace;
+    text-shadow: 1px 1px 3px black;
+  }
+  
+  .project:hover::after {
+    opacity: 1;
+  }
+  
+  .project:active {
+    cursor: grabbing;
+  }
+  
