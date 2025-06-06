@@ -88,9 +88,48 @@ body, html {
     text-shadow: 1px 1px 3px black;
   }
   
-  .project:hover::after {
-    opacity: 1;
+.project::after {
+  content: var(--title);
+  position: absolute;
+  bottom: -2em;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 1.5rem;
+  color: white;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.2s ease;
+  font-family: 'Courier New', Courier, monospace;
+  text-shadow: 0 0 3px cyan, 0 0 5px magenta;
+  mix-blend-mode: exclusion;
+}
+
+.project:hover::after {
+  opacity: 1;
+  transform: scale(1.3) rotateZ(1deg);
+  animation: glitch 0.3s steps(2, end) infinite;
+}
+
+@keyframes glitch {
+  0% {
+    text-shadow: 1px 0 red, -1px 0 cyan;
   }
+  20% {
+    text-shadow: -2px 0 magenta, 2px 0 blue;
+  }
+  40% {
+    text-shadow: 1px -1px green, -1px 1px yellow;
+  }
+  60% {
+    text-shadow: 0 0 3px white, 0 0 5px red;
+  }
+  80% {
+    text-shadow: 2px 1px cyan, -2px -1px magenta;
+  }
+  100% {
+    text-shadow: 0 0 1px white, 0 0 2px black;
+  }
+}
   
   .project:active {
     cursor: grabbing;

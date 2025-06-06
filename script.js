@@ -42,21 +42,28 @@ projects.forEach(project => {
   let dx = (Math.random() - 0.5) * 0.3;
   let dy = (Math.random() - 0.5) * 0.3;
 
-  setInterval(() => {
-    let top = parseFloat(project.style.top);
-    let left = parseFloat(project.style.left);
+ let angle = 0;
 
-    top += dy;
-    left += dx;
+setInterval(() => {
+  let top = parseFloat(project.style.top);
+  let left = parseFloat(project.style.left);
 
-    // Bounce off edges
-    if (top < 0 || top > window.innerHeight - 200) dy *= -1;
-    if (left < 0 || left > window.innerWidth - 200) dx *= -1;
+  top += dy;
+  left += dx;
 
-    project.style.top = `${top}px`;
-    project.style.left = `${left}px`;
-  }, 40);
+  if (top < 0 || top > window.innerHeight - 200) dy *= -1;
+  if (left < 0 || left > window.innerWidth - 200) dx *= -1;
 
+  project.style.top = `${top}px`;
+  project.style.left = `${left}px`;
+
+  // Rotate a bit
+  angle += (Math.random() - 0.5) * 0.5;
+  project.style.transform = `rotate(${angle}deg)`;
+}, 40);
+
+
+  
   // DRAGGING vs CLICK LOGIC
   let isDragging = false;
   let clickStartX = 0;
